@@ -1,0 +1,1548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Institute for Ontological Antiquities | Cabinet of Impossible Specimens</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            museum: {
+              950: '#060709',
+              900: '#0c0e12',
+              850: '#12151b',
+              800: '#191d26',
+              700: '#252b38',
+              accent: '#d4af37', // antique brass/gold
+              amber: '#e69532',
+              danger: '#e04545',
+              cyan: '#38bdf8',
+              parchment: '#f4ede2',
+              ink: '#1c1b18'
+            }
+          },
+          fontFamily: {
+            serif: ['"EB Garamond"', 'Georgia', 'serif'],
+            display: ['"Cinzel"', 'serif'],
+            mono: ['"JetBrains Mono"', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* Custom Scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0c0e12;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #252b38;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #d4af37;
+    }
+
+    /* Vignette & Ambient Atmospheric effects */
+    .museum-vignette {
+      box-shadow: inset 0 0 120px rgba(0, 0, 0, 0.95);
+    }
+    
+    .brass-border {
+      border: 1px solid rgba(212, 175, 55, 0.28);
+      box-shadow: 0 0 15px rgba(212, 175, 55, 0.05);
+    }
+
+    .brass-glow {
+      box-shadow: 0 0 25px rgba(212, 175, 55, 0.15);
+    }
+
+    .scanline {
+      background: linear-gradient(
+        to bottom,
+        rgba(255,255,255,0),
+        rgba(255,255,255,0) 50%,
+        rgba(0, 0, 0, 0.35) 50%,
+        rgba(0, 0, 0, 0.35)
+      );
+      background-size: 100% 4px;
+    }
+
+    /* Thermal gradient indicator */
+    .thermal-spectrum {
+      background: linear-gradient(to right, #000033, #0000ff, #00ffff, #00ff00, #ffff00, #ff0000, #ffffff);
+    }
+
+    @keyframes subtlePulse {
+      0%, 100% { opacity: 0.85; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.008); }
+    }
+
+    .animate-subtle {
+      animation: subtlePulse 7s ease-in-out infinite;
+    }
+
+    /* Print styling for archival labels */
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #print-label-target, #print-label-target * {
+        visibility: visible;
+      }
+      #print-label-target {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        background: white !important;
+        color: black !important;
+      }
+    }
+  </style>
+</head>
+<body class="bg-museum-950 text-gray-200 font-serif antialiased selection:bg-museum-accent/30 selection:text-white min-h-screen flex flex-col overflow-x-hidden">
+
+  <!-- Ambient Audio Tone Generator overlay notification -->
+  <div id="audio-consent-banner" class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-museum-900/95 border border-museum-accent/40 rounded-lg px-6 py-3 shadow-2xl backdrop-blur-md flex items-center space-x-4 text-xs font-mono">
+    <div class="w-2.5 h-2.5 rounded-full bg-museum-accent animate-ping"></div>
+    <span class="text-gray-300">Acoustic resonance emitter calibrated. Activate ambient gallery drone?</span>
+    <button onclick="toggleResonanceAudio(true)" class="px-3 py-1 bg-museum-accent text-museum-950 font-bold rounded hover:bg-yellow-400 transition">ENABLE AUDIO</button>
+    <button onclick="dismissAudioBanner()" class="text-gray-400 hover:text-white">DISMISS</button>
+  </div>
+
+  <!-- Top Archival Navigation Bar -->
+  <header class="border-b border-museum-800/80 bg-museum-900/90 backdrop-blur sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      
+      <!-- Logo / Seal -->
+      <div class="flex items-center space-x-3 cursor-pointer" onclick="resetFilters()">
+        <div class="w-10 h-10 rounded-full border border-museum-accent/60 flex items-center justify-center bg-museum-950 relative overflow-hidden group">
+          <div class="absolute inset-0 bg-museum-accent/10 group-hover:bg-museum-accent/20 transition"></div>
+          <svg class="w-5 h-5 text-museum-accent transition-transform group-hover:rotate-45 duration-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="12" cy="12" r="9"/>
+            <path d="M12 3v18M3 12h18M6.5 6.5l11 11M6.5 17.5l11-11"/>
+          </svg>
+        </div>
+        <div>
+          <h1 class="font-display text-sm tracking-widest text-museum-accent uppercase font-bold">The Institute for Ontological Antiquities</h1>
+          <p class="font-mono text-[10px] text-gray-400 tracking-wider">RESTRICTED CURATORIAL ARCHIVE // CLASS-VI PARADOX DEPOSITORY</p>
+        </div>
+      </div>
+
+      <!-- Controls & Quick Actions -->
+      <div class="flex items-center space-x-3">
+        <!-- Audio Drone Button -->
+        <button id="audio-toggle-btn" onclick="toggleResonanceAudio()" title="Toggle Atmospheric Acoustic Hydrophone" class="p-2 border border-museum-700/60 rounded bg-museum-850 hover:border-museum-accent/60 transition text-gray-300 hover:text-museum-accent flex items-center space-x-1.5 font-mono text-xs">
+          <svg id="audio-icon-off" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"/>
+          </svg>
+          <svg id="audio-icon-on" class="w-4 h-4 text-museum-accent hidden animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/>
+          </svg>
+          <span class="hidden md:inline" id="audio-btn-label">ACOUSTIC DRONE: OFF</span>
+        </button>
+
+        <!-- Access Level Badge -->
+        <div class="px-2.5 py-1 border border-yellow-600/40 bg-yellow-950/20 text-yellow-500 font-mono text-[11px] rounded flex items-center space-x-1.5">
+          <span class="w-1.5 h-1.5 rounded-full bg-yellow-400 animate-pulse"></span>
+          <span>CLEARANCE: LEVEL IV</span>
+        </div>
+
+        <!-- Add Specimen Button -->
+        <button onclick="openNewSpecimenModal()" class="px-3 py-1.5 bg-museum-accent text-museum-950 hover:bg-yellow-400 font-mono text-xs font-semibold rounded flex items-center space-x-1.5 transition shadow">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+          </svg>
+          <span>ACCESSION SPECIMEN</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 w-full flex flex-col">
+    
+    <!-- Top Gallery Search & Wing Navigation -->
+    <div class="mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-museum-800/60 pb-5">
+      
+      <!-- Wings Filter Tabs -->
+      <div class="flex items-center space-x-1.5 overflow-x-auto pb-1 max-w-full text-xs font-mono" id="wings-container">
+        <!-- Injected via JavaScript -->
+      </div>
+
+      <!-- Search & Randomizer -->
+      <div class="flex items-center space-x-2">
+        <div class="relative w-48 sm:w-64">
+          <input type="text" id="search-input" oninput="handleSearch(this.value)" placeholder="Search accession, era..." class="w-full bg-museum-900 border border-museum-700/60 rounded px-3 py-1.5 text-xs font-mono text-gray-200 placeholder-gray-500 focus:outline-none focus:border-museum-accent transition">
+          <svg class="w-3.5 h-3.5 absolute right-2.5 top-2.5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+          </svg>
+        </div>
+        <button onclick="selectRandomSpecimen()" title="Examine Random Specimen" class="px-2.5 py-1.5 bg-museum-850 hover:bg-museum-800 border border-museum-700/60 rounded text-gray-300 hover:text-museum-accent transition font-mono text-xs flex items-center space-x-1">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+          </svg>
+          <span class="hidden sm:inline">RANDOM</span>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Center Stage: Exhibit Showcase & Pedestal -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 flex-1 items-start">
+      
+      <!-- Left Column: Interactive Pedestal & Diagnostic Scanners (7 Cols) -->
+      <div class="lg:col-span-7 flex flex-col space-y-4">
+        
+        <!-- Pedestal Viewport Container -->
+        <div class="relative rounded-lg overflow-hidden bg-museum-900 border border-museum-700/70 shadow-2xl flex flex-col">
+          
+          <!-- Viewport Header Bar -->
+          <div class="px-4 py-2 bg-museum-850 border-b border-museum-800 flex items-center justify-between text-xs font-mono">
+            <div class="flex items-center space-x-2">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span class="text-gray-400">CHAMBER COND.: <span class="text-emerald-400" id="chamber-state">CONTAINMENT STABLE</span></span>
+            </div>
+            
+            <!-- Sensor Readouts in header -->
+            <div class="flex items-center space-x-4 text-[11px] text-gray-400">
+              <span>$\Psi$ PARADOX: <strong id="telemetry-psi" class="text-museum-accent">0.842</strong></span>
+              <span>TEMP: <strong id="telemetry-temp" class="text-red-400">37.0°C</strong></span>
+            </div>
+          </div>
+
+          <!-- Interactive Canvas Chamber -->
+          <div class="relative h-[380px] sm:h-[430px] w-full flex items-center justify-center bg-museum-950 overflow-hidden cursor-crosshair group" id="chamber-viewport">
+            <!-- Simulated Spotlight Vignette -->
+            <div class="absolute inset-0 pointer-events-none museum-vignette z-10"></div>
+            
+            <!-- Chamber Depth Grid Lines -->
+            <div class="absolute inset-0 pointer-events-none opacity-10 bg-[linear-gradient(to_right,#d4af37_1px,transparent_1px),linear-gradient(to_bottom,#d4af37_1px,transparent_1px)] bg-[size:40px_40px]"></div>
+
+            <!-- Dynamic Interactive Canvas -->
+            <canvas id="specimenCanvas" class="relative z-0 w-full h-full block"></canvas>
+
+            <!-- Diagnostic Overlays (Scanline / Grid / Heatmap / Motion) -->
+            <div id="scanline-overlay" class="absolute inset-0 pointer-events-none scanline opacity-30 z-10 hidden"></div>
+            <div id="thermal-overlay" class="absolute inset-0 pointer-events-none mix-blend-color z-10 opacity-60 hidden"></div>
+
+            <!-- Interactive Cursor Coordinates HUD -->
+            <div class="absolute bottom-3 left-3 z-20 font-mono text-[10px] text-gray-500 pointer-events-none bg-museum-950/80 px-2 py-0.5 rounded border border-museum-800">
+              OPTIC FOCUS: [<span id="hud-coord-x">0</span>, <span id="hud-coord-y">0</span>] // FLUX: <span id="hud-flux">CALM</span>
+            </div>
+
+            <!-- Caution Watermark -->
+            <div class="absolute top-3 right-3 z-20 font-mono text-[9px] tracking-widest text-museum-accent/40 border border-museum-accent/20 px-2 py-0.5 rounded uppercase pointer-events-none">
+              DO NOT TOUCH GLASS
+            </div>
+
+            <!-- Active Movement Warning Indicator (shown for unsettling specimens) -->
+            <div id="movement-alert" class="hidden absolute top-3 left-3 z-20 font-mono text-[10px] bg-red-950/90 text-red-300 border border-red-700/60 px-2.5 py-1 rounded flex items-center space-x-1.5 animate-bounce">
+              <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>
+              <span>AUTONOMOUS DRIFT DETECTED</span>
+            </div>
+          </div>
+
+          <!-- Chamber Diagnostic Inspection Modes Bar -->
+          <div class="p-3 bg-museum-900 border-t border-museum-800 flex flex-wrap items-center justify-between gap-2 text-xs font-mono">
+            <span class="text-gray-400 text-[11px] uppercase tracking-wider">SPECTRAL FILTERS:</span>
+            <div class="flex items-center space-x-1 sm:space-x-2">
+              <button onclick="setScanMode('standard')" id="mode-btn-standard" class="px-2.5 py-1 rounded border border-museum-accent/80 bg-museum-accent/20 text-museum-accent text-[11px] transition">
+                STANDARD
+              </button>
+              <button onclick="setScanMode('thermal')" id="mode-btn-thermal" class="px-2.5 py-1 rounded border border-museum-700 bg-museum-850 hover:border-red-400/60 text-gray-400 hover:text-red-400 text-[11px] transition">
+                THERMAL
+              </button>
+              <button onclick="setScanMode('ultraviolet')" id="mode-btn-ultraviolet" class="px-2.5 py-1 rounded border border-museum-700 bg-museum-850 hover:border-purple-400/60 text-gray-400 hover:text-purple-400 text-[11px] transition">
+                SPECTROSCOPIC
+              </button>
+              <button onclick="setScanMode('tachyon')" id="mode-btn-tachyon" class="px-2.5 py-1 rounded border border-museum-700 bg-museum-850 hover:border-cyan-400/60 text-gray-400 hover:text-cyan-400 text-[11px] transition">
+                CHRONO-DRIFT
+              </button>
+            </div>
+          </div>
+
+          <!-- Diagnostic Scanner Feedback Banner -->
+          <div id="scanner-commentary" class="px-4 py-2 bg-museum-850/80 border-t border-museum-800 text-[11px] font-mono text-gray-400 flex items-center justify-between">
+            <span id="scanner-text">Optical field illuminated by 3200K tungsten spotlight. No optical anomaly actively refracting.</span>
+            <span class="text-museum-accent text-[10px]" id="scanner-status">SENSOR ACTIVE</span>
+          </div>
+        </div>
+
+        <!-- Specimen Carousel / Selector Drawer -->
+        <div class="bg-museum-900 border border-museum-800 rounded-lg p-3">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-mono tracking-widest text-gray-400 uppercase">CATALOGUE VAULT INVENTORY (<span id="specimen-count">0</span>)</span>
+            <span class="text-[11px] font-mono text-museum-accent">CLICK TO MOUNT PEDESTAL</span>
+          </div>
+
+          <!-- Horizontal scrolling list of specimens -->
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 max-h-56 overflow-y-auto p-1" id="specimens-list">
+            <!-- Populated via JS -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Column: Curatorial Dossier & Official Museum Exhibit Label (5 Cols) -->
+      <div class="lg:col-span-5 flex flex-col space-y-4">
+        
+        <!-- Printable / Authentic Museum Exhibit Label Plaque -->
+        <div id="print-label-target" class="relative bg-[#0e1015] border-2 border-[#b89535]/40 rounded-lg p-6 sm:p-7 shadow-2xl transition-all duration-300">
+          
+          <!-- Decorative Corner Brass Accents -->
+          <div class="absolute top-1.5 left-1.5 w-3 h-3 border-t-2 border-l-2 border-[#d4af37]/70"></div>
+          <div class="absolute top-1.5 right-1.5 w-3 h-3 border-t-2 border-r-2 border-[#d4af37]/70"></div>
+          <div class="absolute bottom-1.5 left-1.5 w-3 h-3 border-b-2 border-l-2 border-[#d4af37]/70"></div>
+          <div class="absolute bottom-1.5 right-1.5 w-3 h-3 border-b-2 border-r-2 border-[#d4af37]/70"></div>
+
+          <!-- Label Header -->
+          <div class="border-b border-[#d4af37]/30 pb-4 mb-4">
+            <div class="flex items-center justify-between text-[11px] font-mono text-museum-accent tracking-widest mb-1">
+              <span id="label-accession">ACCESSION NO. 1904.12.8</span>
+              <span id="label-wing" class="px-2 py-0.5 rounded bg-museum-accent/10 border border-museum-accent/30 text-[10px]">TEMPORAL ANOMALIES</span>
+            </div>
+            <h2 id="label-title" class="font-display text-2xl font-bold text-gray-100 tracking-wide leading-tight">
+              Petrified Shadow of an Unidentified Child
+            </h2>
+            <div class="mt-2 text-sm text-[#c0a875] italic font-serif flex flex-col">
+              <span id="label-provenance">c. 4th Century BCE, Epirus | Dodona Votive Sanctuary</span>
+              <span id="label-medium" class="text-xs text-gray-400 not-italic font-mono mt-0.5">Medium: Coagulated umbra, modern brass mount</span>
+            </div>
+          </div>
+
+          <!-- Official Scholarly Exhibit Label Body (The 100-word Scholarly Statement) -->
+          <div class="space-y-3 text-gray-200 text-base leading-relaxed font-serif">
+            <div id="label-body" class="first-letter:text-3xl first-letter:font-bold first-letter:float-left first-letter:mr-2 first-letter:text-museum-accent">
+              <!-- Label content injected here -->
+            </div>
+          </div>
+
+          <!-- Provenance / Benefactor footer -->
+          <div class="mt-5 pt-3 border-t border-museum-800 text-[11px] font-serif italic text-gray-400 flex items-center justify-between">
+            <span id="label-donor">Gift of the Society for Antiquarian Survey.</span>
+            <button onclick="window.print()" class="not-italic font-mono text-[10px] text-museum-accent hover:underline flex items-center space-x-1">
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/>
+              </svg>
+              <span>PRINT PLAQUE</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Curatorial Research Log & Containment Directives -->
+        <div class="bg-museum-900 border border-museum-800 rounded-lg p-5 space-y-4">
+          <div class="flex items-center justify-between border-b border-museum-800 pb-2">
+            <h3 class="font-mono text-xs text-museum-accent uppercase tracking-wider flex items-center space-x-2">
+              <svg class="w-4 h-4 text-museum-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+              </svg>
+              <span>CURATORIAL DIRECTIVE & INCIDENT FILE</span>
+            </h3>
+            <span id="label-hazard" class="font-mono text-[10px] px-2 py-0.5 rounded bg-red-950/70 border border-red-700/60 text-red-300">
+              CLASS-II HAZARD
+            </span>
+          </div>
+
+          <!-- Unsettling Incident Log -->
+          <div>
+            <span class="text-[10px] font-mono text-gray-500 uppercase block mb-1">CONFIDENTIAL LOG EXCERPT:</span>
+            <div id="incident-log" class="p-3 bg-museum-950 rounded border border-museum-800 text-xs font-mono text-gray-300 leading-relaxed italic border-l-2 border-l-red-500">
+              <!-- Log text -->
+            </div>
+          </div>
+
+          <!-- Physical Metrics Table -->
+          <div class="grid grid-cols-2 gap-2 text-xs font-mono">
+            <div class="p-2.5 bg-museum-950 rounded border border-museum-800/80">
+              <span class="text-gray-500 block text-[10px]">INTRINSIC MASS</span>
+              <span id="specimen-mass" class="text-gray-200 font-bold">0.000 g</span>
+            </div>
+            <div class="p-2.5 bg-museum-950 rounded border border-museum-800/80">
+              <span class="text-gray-500 block text-[10px]">EQUILIBRIUM TEMP</span>
+              <span id="specimen-temp-display" class="text-red-400 font-bold">37.0°C (310.15 K)</span>
+            </div>
+            <div class="p-2.5 bg-museum-950 rounded border border-museum-800/80">
+              <span class="text-gray-500 block text-[10px]">CONTAINMENT TIER</span>
+              <span id="specimen-tier" class="text-yellow-400 font-bold">HERMETIC CLASS-IV</span>
+            </div>
+            <div class="p-2.5 bg-museum-950 rounded border border-museum-800/80">
+              <span class="text-gray-500 block text-[10px]">CONSERVATION ADVICE</span>
+              <span id="specimen-advice" class="text-gray-300 font-bold truncate">Do not look away</span>
+            </div>
+          </div>
+
+          <!-- Acoustic Resonance Button for this Specimen -->
+          <button onclick="triggerObjectAcousticBurst()" class="w-full py-2 bg-museum-850 hover:bg-museum-800 border border-museum-accent/40 rounded text-museum-accent font-mono text-xs flex items-center justify-center space-x-2 transition">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 100-6 3 3 0 000 6z"/>
+            </svg>
+            <span>PROBE ACOUSTIC EMISSION FREQUENCY</span>
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Modal: Accession New Impossible Specimen -->
+  <div id="new-specimen-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-museum-900 border border-museum-accent/40 rounded-lg max-w-2xl w-full p-6 shadow-2xl overflow-y-auto max-h-[90vh] text-gray-200 font-serif">
+      
+      <div class="flex items-center justify-between border-b border-museum-800 pb-3 mb-4">
+        <div>
+          <h2 class="font-display text-xl text-museum-accent font-bold">New Specimen Accession Form</h2>
+          <p class="font-mono text-xs text-gray-400">Department of Impossible Materials & Inverted Physics</p>
+        </div>
+        <button onclick="closeNewSpecimenModal()" class="text-gray-400 hover:text-white p-1 font-mono text-xl">&times;</button>
+      </div>
+
+      <!-- Quick Generator Button -->
+      <div class="mb-5 p-3 bg-museum-850 rounded border border-museum-accent/30 flex items-center justify-between">
+        <div>
+          <span class="font-mono text-xs text-museum-accent font-semibold block">Need an impossible discovery?</span>
+          <span class="text-xs text-gray-400">Auto-generate a scholarly anomaly with authentic archaeological provenance.</span>
+        </div>
+        <button onclick="generateRandomImpossibleSpecimen()" type="button" class="px-3 py-1.5 bg-museum-accent text-museum-950 font-mono text-xs font-bold rounded hover:bg-yellow-400 transition">
+          ✨ AUTO-INVENT SPECIMEN
+        </button>
+      </div>
+
+      <form id="accession-form" onsubmit="handleNewSpecimenSubmit(event)" class="space-y-4">
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block font-mono text-xs text-gray-300 mb-1">SPECIMEN TITLE *</label>
+            <input type="text" id="form-title" required placeholder="e.g. Fossilized Echo of an Unspoken Word" class="w-full bg-museum-950 border border-museum-700 rounded px-3 py-1.5 text-sm font-serif focus:border-museum-accent focus:outline-none">
+          </div>
+          <div>
+            <label class="block font-mono text-xs text-gray-300 mb-1">ACCESSION CODE *</label>
+            <input type="text" id="form-accession" required placeholder="e.g. 1928.04.19" class="w-full bg-museum-950 border border-museum-700 rounded px-3 py-1.5 text-xs font-mono focus:border-museum-accent focus:outline-none">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block font-mono text-xs text-gray-300 mb-1">PROVENANCE & ERA *</label>
+            <input type="text" id="form-provenance" required placeholder="e.g. Late Bronze Age, Bog of Allen" class="w-full bg-museum-950 border border-museum-700 rounded px-3 py-1.5 text-sm font-serif focus:border-museum-accent focus:outline-none">
+          </div>
+          <div>
+            <label class="block font-mono text-xs text-gray-300 mb-1">MEDIUM / MATERIAL *</label>
+            <input type="text" id="form-medium" required placeholder="e.g. Vitrified noon sunlight, brass cradle" class="w-full bg-museum-950 border border-museum-700 rounded px-3 py-1.5 text-sm font-serif focus:border-museum-accent focus:outline-none">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div>
+            <label class="block font-mono text-xs text-gray-300 mb-1">CURATORIAL WING</label>
+            <select id="form-wing" class="w-full bg-museum-950 border border-museum-700 rounded px-2.5 py-1.5 text-xs font-mono focus:border-museum-accent focus:outline-none">
+              <option value="Temporal Anomalies">Temporal Anomalies</option>
+              <option value="Acoustic Specimens">Acoustic Specimens</option>
+              <option value="Optical Inversions">Optical Inversions</option>
+              <option value="Geological Paradoxes">Geological Paradoxes</option>
+              <option value="Ontological Singularities">Ontological Singularities</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-mono text-xs text-gray-300 mb-1">HAZARD CLASS</label>
+            <select id="form-hazard" class="w-full bg-museum-950 border border-museum-700 rounded px-2.5 py-1.5 text-xs font-mono focus:border-museum-accent focus:outline-none">
+              <option value="Class-I Latent">Class-I Latent</option>
+              <option value="Class-II Ontological">Class-II Ontological</option>
+              <option value="Class-III Cognitohazard">Class-III Cognitohazard</option>
+              <option value="Class-IV Reality Breach">Class-IV Reality Breach</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-mono text-xs text-gray-300 mb-1">TEMPERATURE (K)</label>
+            <input type="number" step="0.1" id="form-temp" value="293.1" class="w-full bg-museum-950 border border-museum-700 rounded px-3 py-1.5 text-xs font-mono focus:border-museum-accent focus:outline-none">
+          </div>
+        </div>
+
+        <div>
+          <div class="flex items-center justify-between mb-1">
+            <label class="font-mono text-xs text-gray-300">OFFICIAL SCHOLARLY LABEL (Max 100 words) *</label>
+            <span id="form-word-count" class="font-mono text-[10px] text-gray-500">0 / 100 words</span>
+          </div>
+          <textarea id="form-label" required rows="4" oninput="updateWordCount(this)" placeholder="Write a scholarly, convincing description. Include one unsettling detail and never explain the mechanism..." class="w-full bg-museum-950 border border-museum-700 rounded p-3 text-sm font-serif leading-relaxed focus:border-museum-accent focus:outline-none"></textarea>
+        </div>
+
+        <div>
+          <label class="block font-mono text-xs text-gray-300 mb-1">CONFIDENTIAL CURATORIAL NOTE / UNSETTLING INCIDENT</label>
+          <input type="text" id="form-incident" placeholder="e.g. Nov 12: Laboratory scales lost calibration whenever staff turned their back." class="w-full bg-museum-950 border border-museum-700 rounded px-3 py-1.5 text-xs font-mono focus:border-museum-accent focus:outline-none">
+        </div>
+
+        <div class="pt-3 border-t border-museum-800 flex items-center justify-end space-x-3">
+          <button type="button" onclick="closeNewSpecimenModal()" class="px-4 py-2 bg-museum-800 hover:bg-museum-700 text-gray-300 rounded font-mono text-xs transition">CANCEL</button>
+          <button type="submit" class="px-5 py-2 bg-museum-accent hover:bg-yellow-400 text-museum-950 font-bold rounded font-mono text-xs transition">ACCESSION TO ARCHIVE</button>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="mt-auto border-t border-museum-800/80 bg-museum-950 text-gray-400 py-6 text-xs font-mono">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="flex items-center space-x-3">
+        <span class="w-2 h-2 rounded-full bg-museum-accent animate-ping"></span>
+        <span>INSTITUTE FOR ONTOLOGICAL ANTIQUITIES &copy; 2026 // ALL PARADOXES CONTAINED UNDER PROTOCOL 9</span>
+      </div>
+      <div class="text-[11px] text-gray-500 flex items-center space-x-4">
+        <span>SCHOLARLY CURATION</span>
+        <span>•</span>
+        <span>WEB AUDIO RESONANCE ACTIVE</span>
+        <span>•</span>
+        <span>ZERO FRAMEWORK BUILD</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Application Script -->
+  <script>
+    /* =========================================================================
+       SPECIMEN DATABASE (Includes the initial prompt's specimen + rich additions)
+       ========================================================================= */
+    const DEFAULT_SPECIMENS = [
+      {
+        id: 'specimen-shadow-child',
+        accession: '1904.12.8',
+        title: 'Petrified Shadow of an Unidentified Child',
+        provenance: 'c. 4th Century BCE, Epirus | Dodona Votive Sanctuary',
+        medium: 'Coagulated umbra, modern brass mount',
+        wing: 'Temporal Anomalies',
+        hazardClass: 'Class-II Ontological',
+        tempKelvin: 310.15, // 37.0 C
+        mass: '0.000 g',
+        tier: 'HERMETIC CLASS-IV',
+        donor: 'Gift of the Society for Antiquarian Survey.',
+        advice: 'Disregard posture shifts',
+        label: `Excavated from a sealed votive cist at Dodona, this rigid silhouette remains completely detached from any casting body, measuring 42 centimeters across the pedestal. Spectroscopic analysis remains inconclusive, as gallery illumination bends sharply around the contour without penetrating its interior. Notably, the specimen maintains a constant core temperature identical to living human tissue. Curatorial staff are strictly advised to disregard subtle alterations in the figure’s seated posture documented between routine inspections.`,
+        incident: 'Night patrol log 03:14 AM: Footprint thermal depressions detected leading toward the gallery exit, though the silhouette remained seated upon its mount.',
+        audioFreq: 110, // low ominous cello-like fundamental
+        audioHarmonics: [1.5, 2.7, 4.1],
+        renderType: 'shadow'
+      },
+      {
+        id: 'specimen-echo-amber',
+        accession: '1888.09.21',
+        title: 'Vitrified Echo of an Extinct Vowel',
+        provenance: 'c. 1350 BCE, Amarna | Royal Archive Vaults',
+        medium: 'Calcified acoustic resin, silver wire suspension',
+        wing: 'Acoustic Specimens',
+        hazardClass: 'Class-III Cognitohazard',
+        tempKelvin: 288.4,
+        mass: '14.220 g',
+        tier: 'ACOUSTIC SHIELDED',
+        donor: 'Bequest of the Petrie Foundation for Pharaonic Curiosities.',
+        advice: 'Wear passive ear dampeners',
+        label: `Discovered inside an alabaster unguent jar at Amarna, this translucent nodule represents an acoustic phoneme preserved in solid physical phase. The object continuously displaces 85 decibels of silence, absorbing conversational frequencies within a six-foot radius. Staff standing within its perimeter report an urge to complete a sentence they have never learned in a tongue that possesses no grammar.`,
+        incident: 'Conservator M. Higgins reported hearing his childhood address pronounced backward inside his own cranium after polishing the vitrified surface.',
+        audioFreq: 220,
+        audioHarmonics: [1.414, 2.236, 3.141],
+        renderType: 'acoustic'
+      },
+      {
+        id: 'specimen-backward-compass',
+        accession: '1742.06.14',
+        title: 'The Cartographer’s Inverted Needle',
+        provenance: '1742 CE, Portsmouth dockyards | HMS Vanguard wreck',
+        medium: 'Lodestone alloy, bone dial, oxidized brass casing',
+        wing: 'Optical Inversions',
+        hazardClass: 'Class-I Latent',
+        tempKelvin: 279.1,
+        mass: '185.40 g',
+        tier: 'MAGNETIC DECOUPLED',
+        donor: 'Admiralty Board for Non-Navigable Waters.',
+        advice: 'Never record its bearing',
+        label: `Recovered from the sunken sea-chest of navigator Tobias Vance, this dry-card compass refuses orientation toward geomagnetic north. Instead, the balance pivot aligns persistently toward the spatial coordinates where the observer will experience their own death. Prolonged examination produces mild vertigo and a distinct scent of cold seawater.`,
+        incident: 'Dr. Aris examined the bearing for forty consecutive minutes; when asked the date, he inquired if the Thames had finished drying up yet.',
+        audioFreq: 174,
+        audioHarmonics: [2.0, 3.5, 5.0],
+        renderType: 'compass'
+      },
+      {
+        id: 'specimen-hourglass',
+        accession: '1284.11.02',
+        title: 'The Non-Euclidean Hourglass of Basra',
+        provenance: 'c. 13th Century CE, Mesopotamia | House of Wisdom ruins',
+        medium: 'Blown quartz glass, mineralized negative sand',
+        wing: 'Temporal Anomalies',
+        hazardClass: 'Class-IV Reality Breach',
+        tempKelvin: 254.2, // Below zero C, cold to touch
+        mass: '-3.180 g (Negative)',
+        tier: 'ISOLATION LEVEL V',
+        donor: 'Recovered during the 1927 Euphrates Geological Survey.',
+        advice: 'Do not invert under sunlight',
+        label: `Constructed from seamless quartz without joints, the dark particles inside this vessel perpetually stream upward against gravity into the upper bulb. Curiously, whenever the vessel is manually inverted, the quantity of grains diminishes by approximately four grains per cycle. Conservators estimate that once the upper chamber empties completely, the hour of Tuesday afternoon will permanently cease to occur.`,
+        incident: 'During routine dusting, three grains drifted into the open ambient air; the laboratory clock immediately ticked 40 seconds into the previous century.',
+        audioFreq: 96,
+        audioHarmonics: [1.618, 2.618, 4.236],
+        renderType: 'hourglass'
+      },
+      {
+        id: 'specimen-retinal-cast',
+        accession: '1931.02.17',
+        title: 'Calcified Sightline of an Unnamed Monk',
+        provenance: 'c. 1190 CE, Mount Athos | St. Athanasius Crypt',
+        medium: 'Vitrified ocular light, leaded iron cradle',
+        wing: 'Optical Inversions',
+        hazardClass: 'Class-II Ontological',
+        tempKelvin: 304.2,
+        mass: '2.800 g',
+        tier: 'FOCAL SEALED',
+        donor: 'Anonymous monastic transfer.',
+        advice: 'Do not intersect line of sight',
+        label: `Measuring 1.8 meters in length and less than a millimeter in diameter, this rigid, crystalline cord preserves the exact optical trajectory between an eleventh-century ascetic and his devotional icon at the instant of expiration. Though brittle as spun glass, it withstands diamond cutters without scratching. Visitors crossing the beam report feeling wet breath upon their eyelashes.`,
+        incident: 'Senior Archivist Patel accidentally severed the line with an aluminum ruler; the room plunged into absolute pitch darkness for nineteen heartbeats.',
+        audioFreq: 260,
+        audioHarmonics: [1.333, 1.875, 3.25],
+        renderType: 'sightline'
+      },
+      {
+        id: 'specimen-silent-stone',
+        accession: '1899.04.03',
+        title: 'Petrified Noon of Karnak',
+        provenance: 'c. 1290 BCE, Luxor | Hypostyle Hall Pavement',
+        medium: 'Coagulated solar radiance, granite matrix',
+        wing: 'Geological Paradoxes',
+        hazardClass: 'Class-II Ontological',
+        tempKelvin: 334.8, // 61.6°C
+        mass: '3,410.00 g',
+        tier: 'THERMAL SHIELDED',
+        donor: 'Franco-Egyptian Antiquities Syndicate.',
+        advice: 'Maintain dark cover',
+        label: `Hewn from sandstone beneath the central obelisk at Karnak, this cubic fragment casts no shadow under any angle of illumination. Instead, it projects a pool of dense, tangible darkness directly above its upper face, beneath which the air remains suffocatingly hot. Laboratory instruments register the chirp of cicadas that perished thirty-three centuries ago.`,
+        incident: 'An infrared thermal camera pointed at the stone for 12 seconds overheated and burned the likeness of three masked priests into its silicon sensor.',
+        audioFreq: 130,
+        audioHarmonics: [2.1, 3.3, 4.7],
+        renderType: 'sunstone'
+      }
+    ];
+
+    // State
+    let specimens = [];
+    let currentSpecimenId = null;
+    let activeWing = 'ALL';
+    let scanMode = 'standard'; // 'standard', 'thermal', 'ultraviolet', 'tachyon'
+    let searchQuery = '';
+    let mousePos = { x: 0.5, y: 0.5 };
+    let animationFrameId = null;
+
+    // Web Audio State
+    let audioCtx = null;
+    let masterGain = null;
+    let osc1 = null, osc2 = null, osc3 = null;
+    let isAudioPlaying = false;
+
+    /* =========================================================================
+       INITIALIZATION
+       ========================================================================= */
+    window.addEventListener('DOMContentLoaded', () => {
+      loadSpecimens();
+      renderWings();
+      selectSpecimen(specimens[0].id);
+      initCanvasChamber();
+      
+      // Auto prompt audio banner after short delay
+      setTimeout(() => {
+        if (!isAudioPlaying) {
+          document.getElementById('audio-consent-banner').classList.remove('hidden');
+        }
+      }, 2500);
+    });
+
+    function loadSpecimens() {
+      const stored = localStorage.getItem('ontological_specimens_v1');
+      if (stored) {
+        try {
+          specimens = JSON.parse(stored);
+        } catch (e) {
+          specimens = [...DEFAULT_SPECIMENS];
+        }
+      } else {
+        specimens = [...DEFAULT_SPECIMENS];
+        saveSpecimens();
+      }
+    }
+
+    function saveSpecimens() {
+      localStorage.setItem('ontological_specimens_v1', JSON.stringify(specimens));
+    }
+
+    /* =========================================================================
+       GALLERY BROWSING & FILTERS
+       ========================================================================= */
+    const WINGS = [
+      'ALL',
+      'Temporal Anomalies',
+      'Acoustic Specimens',
+      'Optical Inversions',
+      'Geological Paradoxes',
+      'Ontological Singularities'
+    ];
+
+    function renderWings() {
+      const container = document.getElementById('wings-container');
+      container.innerHTML = WINGS.map(wing => {
+        const isSelected = activeWing === wing;
+        return `
+          <button onclick="setWing('${wing}')" class="px-2.5 py-1 whitespace-nowrap rounded transition ${
+            isSelected 
+              ? 'bg-museum-accent text-museum-950 font-bold shadow' 
+              : 'bg-museum-900 border border-museum-800 text-gray-400 hover:text-gray-200 hover:border-museum-700'
+          }">
+            ${wing === 'ALL' ? 'ALL WINGS' : wing.toUpperCase()}
+          </button>
+        `;
+      }).join('');
+    }
+
+    function setWing(wing) {
+      activeWing = wing;
+      renderWings();
+      renderSpecimensList();
+    }
+
+    function handleSearch(val) {
+      searchQuery = val.toLowerCase().trim();
+      renderSpecimensList();
+    }
+
+    function resetFilters() {
+      activeWing = 'ALL';
+      searchQuery = '';
+      document.getElementById('search-input').value = '';
+      renderWings();
+      renderSpecimensList();
+    }
+
+    function renderSpecimensList() {
+      const listEl = document.getElementById('specimens-list');
+      const filtered = specimens.filter(s => {
+        const matchWing = (activeWing === 'ALL' || s.wing === activeWing);
+        const matchSearch = (!searchQuery || 
+          s.title.toLowerCase().includes(searchQuery) ||
+          s.accession.toLowerCase().includes(searchQuery) ||
+          s.provenance.toLowerCase().includes(searchQuery) ||
+          s.label.toLowerCase().includes(searchQuery)
+        );
+        return matchWing && matchSearch;
+      });
+
+      document.getElementById('specimen-count').innerText = `${filtered.length} ARCHIVED`;
+
+      if (filtered.length === 0) {
+        listEl.innerHTML = `<div class="col-span-full py-8 text-center text-xs font-mono text-gray-500">NO CLASSIFIED SPECIMENS MATCH CRITERIA</div>`;
+        return;
+      }
+
+      listEl.innerHTML = filtered.map(s => {
+        const isCurrent = s.id === currentSpecimenId;
+        return `
+          <div onclick="selectSpecimen('${s.id}')" class="cursor-pointer p-2 rounded border transition text-left relative overflow-hidden group ${
+            isCurrent 
+              ? 'border-museum-accent bg-museum-accent/10 shadow-lg' 
+              : 'border-museum-800/80 bg-museum-950 hover:border-museum-700 hover:bg-museum-900'
+          }">
+            <div class="flex items-center justify-between text-[9px] font-mono text-museum-accent/80 mb-0.5">
+              <span>${s.accession}</span>
+              <span class="text-gray-500">${s.wing.split(' ')[0]}</span>
+            </div>
+            <h4 class="font-serif font-bold text-xs text-gray-200 leading-tight line-clamp-2 group-hover:text-museum-accent transition">
+              ${s.title}
+            </h4>
+            <div class="mt-1 text-[10px] text-gray-400 font-serif italic truncate">
+              ${s.provenance.split('|')[0]}
+            </div>
+            ${isCurrent ? '<div class="absolute right-0 top-0 bottom-0 w-1 bg-museum-accent"></div>' : ''}
+          </div>
+        `;
+      }).join('');
+    }
+
+    /* =========================================================================
+       SPECIMEN SELECTION & LABEL RENDERING
+       ========================================================================= */
+    function selectSpecimen(id) {
+      const s = specimens.find(item => item.id === id);
+      if (!s) return;
+
+      currentSpecimenId = id;
+      renderSpecimensList();
+
+      // Update Plaque Info
+      document.getElementById('label-accession').innerText = `ACCESSION NO. ${s.accession}`;
+      document.getElementById('label-wing').innerText = s.wing.toUpperCase();
+      document.getElementById('label-title').innerText = s.title;
+      document.getElementById('label-provenance').innerText = s.provenance;
+      document.getElementById('label-medium').innerText = `Medium: ${s.medium}`;
+      document.getElementById('label-body').innerText = s.label;
+      document.getElementById('label-donor').innerText = s.donor || 'Gift of the Society for Antiquarian Survey.';
+
+      // Curatorial Dossier & Metrics
+      document.getElementById('label-hazard').innerText = (s.hazardClass || 'CLASS-II HAZARD').toUpperCase();
+      document.getElementById('incident-log').innerText = s.incident;
+      document.getElementById('specimen-mass').innerText = s.mass || '0.000 g';
+      
+      const cTemp = (s.tempKelvin - 273.15).toFixed(1);
+      document.getElementById('specimen-temp-display').innerText = `${cTemp}°C (${s.tempKelvin} K)`;
+      document.getElementById('telemetry-temp').innerText = `${cTemp}°C`;
+      document.getElementById('specimen-tier').innerText = s.tier || 'HERMETIC CLASS-IV';
+      document.getElementById('specimen-advice').innerText = s.advice || 'Standard vigilance';
+
+      // Update chamber indicator & movement alert
+      const movementAlert = document.getElementById('movement-alert');
+      if (s.renderType === 'shadow' || s.hazardClass.includes('IV') || s.hazardClass.includes('Breach')) {
+        movementAlert.classList.remove('hidden');
+      } else {
+        movementAlert.classList.add('hidden');
+      }
+
+      // Update audio synthesizer frequency to match object profile
+      if (isAudioPlaying) {
+        tuneSynthesizerToCurrent();
+      }
+
+      // Update sensor text based on current scan mode
+      updateScannerStatus();
+    }
+
+    function selectRandomSpecimen() {
+      if (specimens.length === 0) return;
+      const rand = specimens[Math.floor(Math.random() * specimens.length)];
+      selectSpecimen(rand.id);
+    }
+
+    /* =========================================================================
+       SCAN MODES & DIAGNOSTIC HUD
+       ========================================================================= */
+    function setScanMode(mode) {
+      scanMode = mode;
+      
+      // Update buttons
+      ['standard', 'thermal', 'ultraviolet', 'tachyon'].forEach(m => {
+        const btn = document.getElementById(`mode-btn-${m}`);
+        if (m === mode) {
+          btn.className = 'px-2.5 py-1 rounded border border-museum-accent bg-museum-accent/25 text-museum-accent font-bold text-[11px] transition shadow';
+        } else {
+          btn.className = 'px-2.5 py-1 rounded border border-museum-700 bg-museum-850 hover:border-gray-500 text-gray-400 text-[11px] transition';
+        }
+      });
+
+      const scanline = document.getElementById('scanline-overlay');
+      const thermal = document.getElementById('thermal-overlay');
+
+      scanline.classList.toggle('hidden', mode === 'standard');
+      thermal.classList.toggle('hidden', mode !== 'thermal');
+
+      updateScannerStatus();
+    }
+
+    function updateScannerStatus() {
+      const s = specimens.find(item => item.id === currentSpecimenId);
+      if (!s) return;
+
+      const txt = document.getElementById('scanner-text');
+      const stat = document.getElementById('scanner-status');
+      const psi = document.getElementById('telemetry-psi');
+
+      if (scanMode === 'standard') {
+        txt.innerText = 'Illumination: 3200K gallery spotlight. Optical perimeter calibrated to 100%.';
+        stat.innerText = 'NOMINAL FLUX';
+        psi.innerText = '0.014';
+      } else if (scanMode === 'thermal') {
+        const cTemp = (s.tempKelvin - 273.15).toFixed(1);
+        txt.innerText = `Fluoroscopic sensor: Core emits impossible biological equilibrium at ${cTemp}°C without energy intake.`;
+        stat.innerText = 'HEAT ANOMALY';
+        psi.innerText = '0.942';
+      } else if (scanMode === 'ultraviolet') {
+        txt.innerText = 'Ultraviolet 365nm: Specimen absorbs photons without remitting phosphorescence. Light bends around edges.';
+        stat.innerText = 'LIGHT INVERSION';
+        psi.innerText = '1.208';
+      } else if (scanMode === 'tachyon') {
+        txt.innerText = 'Chrono-drift interferometer: Temporal variance registered at -3.8 seconds relative to UTC.';
+        stat.innerText = 'TIME DILATION';
+        psi.innerText = '4.915';
+      }
+    }
+
+    /* =========================================================================
+       PROCEDURAL CANVAS SIMULATION CHAMBER
+       ========================================================================= */
+    let canvas, ctx;
+    let canvasWidth, canvasHeight;
+    let time = 0;
+
+    function initCanvasChamber() {
+      canvas = document.getElementById('specimenCanvas');
+      ctx = canvas.getContext('2d');
+      resizeCanvas();
+      window.addEventListener('resize', resizeCanvas);
+
+      const chamber = document.getElementById('chamber-viewport');
+      chamber.addEventListener('mousemove', (e) => {
+        const rect = chamber.getBoundingClientRect();
+        mousePos.x = (e.clientX - rect.left) / rect.width;
+        mousePos.y = (e.clientY - rect.top) / rect.height;
+        
+        document.getElementById('hud-coord-x').innerText = (mousePos.x * 100).toFixed(1);
+        document.getElementById('hud-coord-y').innerText = (mousePos.y * 100).toFixed(1);
+        
+        const distFromCenter = Math.hypot(mousePos.x - 0.5, mousePos.y - 0.5);
+        document.getElementById('hud-flux').innerText = distFromCenter < 0.2 ? 'PERTURBED' : 'CALM';
+      });
+
+      startSimulationLoop();
+    }
+
+    function resizeCanvas() {
+      const container = canvas.parentElement;
+      canvasWidth = container.clientWidth;
+      canvasHeight = container.clientHeight;
+      canvas.width = canvasWidth * window.devicePixelRatio;
+      canvas.height = canvasHeight * window.devicePixelRatio;
+      ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+    }
+
+    function startSimulationLoop() {
+      function render() {
+        time += 0.02;
+        ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+
+        // Render Pedestal and Base
+        drawPedestal();
+
+        // Render Active Specimen
+        const s = specimens.find(item => item.id === currentSpecimenId);
+        if (s) {
+          switch (s.renderType) {
+            case 'shadow':
+              drawPetrifiedShadow(s);
+              break;
+            case 'acoustic':
+              drawAcousticResin(s);
+              break;
+            case 'compass':
+              drawParadoxicalCompass(s);
+              break;
+            case 'hourglass':
+              drawImpossibleHourglass(s);
+              break;
+            case 'sightline':
+              drawVitrifiedSightline(s);
+              break;
+            case 'sunstone':
+              drawPetrifiedNoon(s);
+              break;
+            default:
+              drawGenericCuriosity(s);
+          }
+        }
+
+        // Apply scan mode visual tinting directly on canvas
+        if (scanMode === 'thermal') {
+          drawThermalGlow();
+        } else if (scanMode === 'ultraviolet') {
+          drawUVRadiation();
+        } else if (scanMode === 'tachyon') {
+          drawChronoGlitch();
+        }
+
+        animationFrameId = requestAnimationFrame(render);
+      }
+      render();
+    }
+
+    function drawPedestal() {
+      const cx = canvasWidth / 2;
+      const cy = canvasHeight * 0.72;
+
+      // Pedestal top ellipse
+      ctx.save();
+      const grad = ctx.createLinearGradient(cx - 140, cy, cx + 140, cy);
+      grad.addColorStop(0, '#10131a');
+      grad.addColorStop(0.5, '#222834');
+      grad.addColorStop(1, '#10131a');
+
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.ellipse(cx, cy, 140, 32, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.lineWidth = 1.5;
+      ctx.strokeStyle = 'rgba(212, 175, 55, 0.4)';
+      ctx.stroke();
+
+      // Pedestal body
+      ctx.fillStyle = '#0c0f14';
+      ctx.fillRect(cx - 120, cy, 240, 90);
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = 'rgba(212, 175, 55, 0.2)';
+      ctx.strokeRect(cx - 120, cy, 240, 90);
+
+      // Brass Inscription Plate
+      ctx.fillStyle = 'rgba(212, 175, 55, 0.2)';
+      ctx.fillRect(cx - 45, cy + 25, 90, 20);
+      ctx.strokeStyle = '#d4af37';
+      ctx.strokeRect(cx - 45, cy + 25, 90, 20);
+      ctx.fillStyle = '#d4af37';
+      ctx.font = '8px "JetBrains Mono"';
+      ctx.textAlign = 'center';
+      ctx.fillText('NON-ENTITAS', cx, cy + 38);
+      ctx.restore();
+    }
+
+    // Specimen 1: Petrified Shadow
+    function drawPetrifiedShadow(s) {
+      const cx = canvasWidth / 2;
+      const cy = canvasHeight * 0.62;
+
+      // Subtle autonomous micro-movement (the unsettling detail!)
+      const postureShift = Math.sin(time * 0.8) * 3;
+      const breathing = Math.sin(time * 1.5) * 2;
+
+      ctx.save();
+      
+      // Shadow halo
+      const rad = ctx.createRadialGradient(cx, cy - 40, 10, cx, cy - 40, 90);
+      rad.addColorStop(0, 'rgba(0, 0, 0, 0.95)');
+      rad.addColorStop(0.7, 'rgba(12, 15, 20, 0.8)');
+      rad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      ctx.fillStyle = rad;
+      ctx.beginPath();
+      ctx.arc(cx, cy - 40, 100, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Rigid silhouette of seated child
+      ctx.fillStyle = '#030406'; // darker than background void
+      ctx.beginPath();
+      
+      // Head
+      ctx.arc(cx + postureShift * 0.3, cy - 100 + breathing, 18, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Torso & sitting legs
+      ctx.beginPath();
+      ctx.moveTo(cx - 12, cy - 82 + breathing);
+      ctx.bezierCurveTo(cx - 25, cy - 50, cx - 35, cy - 20, cx - 40, cy);
+      ctx.lineTo(cx + 35, cy);
+      ctx.bezierCurveTo(cx + 30, cy - 30, cx + 18, cy - 55, cx + 12, cy - 82 + breathing);
+      ctx.closePath();
+      ctx.fill();
+
+      // Sharp obsidian edge reflection (bends light around perimeter)
+      ctx.lineWidth = 1.2;
+      ctx.strokeStyle = 'rgba(212, 175, 55, 0.35)';
+      ctx.stroke();
+
+      // Mount brass pins holding the shadow in place
+      ctx.fillStyle = '#d4af37';
+      ctx.fillRect(cx - 38, cy - 2, 6, 6);
+      ctx.fillRect(cx + 32, cy - 2, 6, 6);
+
+      ctx.restore();
+    }
+
+    // Specimen 2: Acoustic Resin
+    function drawAcousticResin(s) {
+      const cx = canvasWidth / 2;
+      const cy = canvasHeight * 0.45;
+
+      ctx.save();
+      // Amber stone suspension
+      const amberGrad = ctx.createRadialGradient(cx - 10, cy - 15, 5, cx, cy, 60);
+      amberGrad.addColorStop(0, 'rgba(245, 175, 60, 0.9)');
+      amberGrad.addColorStop(0.6, 'rgba(180, 90, 20, 0.8)');
+      amberGrad.addColorStop(1, 'rgba(60, 25, 5, 0.85)');
+
+      ctx.fillStyle = amberGrad;
+      ctx.beginPath();
+      ctx.ellipse(cx, cy, 55, 75, 0.15, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.lineWidth = 1.5;
+      ctx.strokeStyle = '#d4af37';
+      ctx.stroke();
+
+      // Resonant frozen acoustic standing wave rings inside
+      for (let r = 10; r < 45; r += 8) {
+        ctx.beginPath();
+        const ripple = Math.sin(time * 3 + r) * 2;
+        ctx.arc(cx, cy, r + ripple, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(255, 230, 160, ${0.4 - r * 0.007})`;
+        ctx.lineWidth = 1;
+        ctx.stroke();
+      }
+
+      // Silver suspension wire
+      ctx.beginPath();
+      ctx.moveTo(cx, cy - 75);
+      ctx.lineTo(cx, 0);
+      ctx.strokeStyle = 'rgba(200, 200, 210, 0.6)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+
+      ctx.restore();
+    }
+
+    // Specimen 3: The Backward Compass
+    function drawParadoxicalCompass(s) {
+      const cx = canvasWidth / 2;
+      const cy = canvasHeight * 0.48;
+
+      ctx.save();
+      // Brass casing
+      ctx.beginPath();
+      ctx.arc(cx, cy, 70, 0, Math.PI * 2);
+      ctx.fillStyle = '#1c170d';
+      ctx.fill();
+      ctx.lineWidth = 4;
+      ctx.strokeStyle = '#b89535';
+      ctx.stroke();
+
+      // Dial face
+      ctx.beginPath();
+      ctx.arc(cx, cy, 62, 0, Math.PI * 2);
+      ctx.fillStyle = '#0f1013';
+      ctx.fill();
+
+      // Cardinal points: YESTERDAY, TOMORROW, NEVER, ALWAYS
+      ctx.font = '8px "Cinzel"';
+      ctx.fillStyle = '#d4af37';
+      ctx.textAlign = 'center';
+      ctx.fillText('TOMORROW', cx, cy - 48);
+      ctx.fillText('YESTERDAY', cx, cy + 54);
+      ctx.fillText('NEVER', cx - 42, cy + 3);
+      ctx.fillText('ALWAYS', cx + 42, cy + 3);
+
+      // Paradoxical Needle rotating toward mouse or unnatural angle
+      const angle = (time * 0.5) + (mousePos.x * 2.5);
+      ctx.translate(cx, cy);
+      ctx.rotate(angle);
+
+      // North (Black needle pointing away)
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(5, -45);
+      ctx.lineTo(0, -55);
+      ctx.lineTo(-5, -45);
+      ctx.closePath();
+      ctx.fillStyle = '#e04545';
+      ctx.fill();
+
+      // South needle
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(5, 45);
+      ctx.lineTo(0, 55);
+      ctx.lineTo(-5, 45);
+      ctx.closePath();
+      ctx.fillStyle = '#445';
+      ctx.fill();
+
+      ctx.restore();
+    }
+
+    // Specimen 4: The Non-Euclidean Hourglass
+    function drawImpossibleHourglass(s) {
+      const cx = canvasWidth / 2;
+      const cy = canvasHeight * 0.46;
+
+      ctx.save();
+      // Glass bulb contours
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = 'rgba(160, 210, 240, 0.6)';
+
+      ctx.beginPath();
+      ctx.moveTo(cx - 35, cy - 65);
+      ctx.bezierCurveTo(cx - 35, cy - 20, cx - 8, cy - 10, cx - 4, cy);
+      ctx.bezierCurveTo(cx - 8, cy + 10, cx - 35, cy + 20, cx - 35, cy + 65);
+      ctx.lineTo(cx + 35, cy + 65);
+      ctx.bezierCurveTo(cx + 35, cy + 20, cx + 8, cy + 10, cx + 4, cy);
+      ctx.bezierCurveTo(cx + 8, cy - 10, cx + 35, cy - 20, cx + 35, cy - 65);
+      ctx.closePath();
+      ctx.fillStyle = 'rgba(10, 25, 40, 0.4)';
+      ctx.fill();
+      ctx.stroke();
+
+      // Antigravity sand stream falling UPWARDS
+      ctx.fillStyle = '#38bdf8';
+      for (let i = 0; i < 25; i++) {
+        const grainY = cy + 50 - ((time * 40 + i * 15) % 110);
+        const grainX = cx + (Math.sin(i * 1.7) * 2);
+        ctx.fillRect(grainX, grainY, 2, 2);
+      }
+
+      // Upper bulb filling up with cold light
+      ctx.beginPath();
+      ctx.arc(cx, cy - 45, 18, 0, Math.PI);
+      ctx.fillStyle = 'rgba(56, 189, 248, 0.7)';
+      ctx.fill();
+
+      ctx.restore();
+    }
+
+    // Specimen 5: Calcified Sightline
+    function drawVitrifiedSightline(s) {
+      const cx = canvasWidth / 2;
+      const cy = canvasHeight * 0.48;
+
+      ctx.save();
+      // Tension mounts on left and right
+      ctx.fillStyle = '#b89535';
+      ctx.fillRect(cx - 100, cy - 10, 14, 20);
+      ctx.fillRect(cx + 86, cy - 10, 14, 20);
+
+      // The sightline itself (razor thin, vibrating with human gaze)
+      const vibration = Math.sin(time * 12) * 1.2;
+      ctx.beginPath();
+      ctx.moveTo(cx - 95, cy);
+      ctx.quadraticCurveTo(cx, cy + vibration, cx + 90, cy);
+      ctx.lineWidth = 1.2;
+      ctx.strokeStyle = '#fef08a';
+      ctx.shadowColor = '#eab308';
+      ctx.shadowBlur = 10;
+      ctx.stroke();
+
+      // Optical focal pulse traversing the strand
+      const pulseX = cx - 90 + ((time * 60) % 180);
+      ctx.beginPath();
+      ctx.arc(pulseX, cy + vibration * 0.5, 3.5, 0, Math.PI * 2);
+      ctx.fillStyle = '#ffffff';
+      ctx.fill();
+
+      ctx.restore();
+    }
+
+    // Specimen 6: Petrified Noon
+    function drawPetrifiedNoon(s) {
+      const cx = canvasWidth / 2;
+      const cy = canvasHeight * 0.48;
+
+      ctx.save();
+      // Dense granite cube
+      ctx.fillStyle = '#1c1b18';
+      ctx.fillRect(cx - 45, cy - 45, 90, 90);
+      ctx.lineWidth = 1.5;
+      ctx.strokeStyle = '#d4af37';
+      ctx.strokeRect(cx - 45, cy - 45, 90, 90);
+
+      // Upward column of tangible darkness / heat distortion
+      const heatGrad = ctx.createLinearGradient(cx, cy - 45, cx, cy - 160);
+      heatGrad.addColorStop(0, 'rgba(0, 0, 0, 0.95)');
+      heatGrad.addColorStop(0.5, 'rgba(230, 149, 50, 0.25)');
+      heatGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+
+      ctx.fillStyle = heatGrad;
+      ctx.fillRect(cx - 35, cy - 160, 70, 115);
+
+      ctx.restore();
+    }
+
+    function drawGenericCuriosity(s) {
+      const cx = canvasWidth / 2;
+      const cy = canvasHeight * 0.48;
+
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(cx, cy, 40, 0, Math.PI * 2);
+      ctx.fillStyle = '#1f2937';
+      ctx.fill();
+      ctx.strokeStyle = '#d4af37';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      ctx.fillStyle = '#e5e7eb';
+      ctx.font = '10px "JetBrains Mono"';
+      ctx.textAlign = 'center';
+      ctx.fillText('ANOMALY', cx, cy + 3);
+      ctx.restore();
+    }
+
+    // Overlay visual effects
+    function drawThermalGlow() {
+      ctx.save();
+      const cx = canvasWidth / 2;
+      const cy = canvasHeight * 0.52;
+      const grad = ctx.createRadialGradient(cx, cy, 20, cx, cy, 120);
+      grad.addColorStop(0, 'rgba(255, 40, 40, 0.45)');
+      grad.addColorStop(0.5, 'rgba(255, 200, 0, 0.2)');
+      grad.addColorStop(1, 'rgba(0, 150, 255, 0)');
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.arc(cx, cy, 120, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    function drawUVRadiation() {
+      ctx.save();
+      ctx.fillStyle = 'rgba(147, 51, 234, 0.08)';
+      ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+      ctx.restore();
+    }
+
+    function drawChronoGlitch() {
+      if (Math.random() > 0.88) {
+        ctx.save();
+        const y = Math.random() * canvasHeight;
+        const h = 4 + Math.random() * 12;
+        ctx.fillStyle = 'rgba(56, 189, 248, 0.25)';
+        ctx.fillRect(0, y, canvasWidth, h);
+        ctx.restore();
+      }
+    }
+
+    /* =========================================================================
+       PROCEDURAL WEB AUDIO SYNTHESIZER (ACOUSTIC HYDROPHONE)
+       ========================================================================= */
+    function initWebAudio() {
+      if (audioCtx) return;
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      audioCtx = new AudioContext();
+
+      masterGain = audioCtx.createGain();
+      masterGain.gain.setValueAtTime(0.0001, audioCtx.currentTime);
+      masterGain.connect(audioCtx.destination);
+
+      // 3 subtle atmospheric oscillators (tri / sine / detuned saw for museum drone)
+      osc1 = audioCtx.createOscillator();
+      osc2 = audioCtx.createOscillator();
+      osc3 = audioCtx.createOscillator();
+
+      osc1.type = 'sine';
+      osc2.type = 'triangle';
+      osc3.type = 'sine';
+
+      const filter = audioCtx.createBiquadFilter();
+      filter.type = 'lowpass';
+      filter.frequency.value = 450;
+
+      osc1.connect(filter);
+      osc2.connect(filter);
+      osc3.connect(filter);
+      filter.connect(masterGain);
+
+      osc1.start();
+      osc2.start();
+      osc3.start();
+
+      tuneSynthesizerToCurrent();
+    }
+
+    function tuneSynthesizerToCurrent() {
+      if (!audioCtx) return;
+      const s = specimens.find(item => item.id === currentSpecimenId);
+      const baseFreq = s?.audioFreq || 110;
+
+      const now = audioCtx.currentTime;
+      osc1.frequency.setTargetAtTime(baseFreq, now, 0.2);
+      osc2.frequency.setTargetAtTime(baseFreq * (s?.audioHarmonics?.[0] || 1.5), now, 0.3);
+      osc3.frequency.setTargetAtTime(baseFreq * (s?.audioHarmonics?.[1] || 2.1) + 1.5, now, 0.4);
+    }
+
+    function toggleResonanceAudio(forceState) {
+      if (!audioCtx) {
+        initWebAudio();
+      }
+
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+
+      isAudioPlaying = forceState !== undefined ? forceState : !isAudioPlaying;
+
+      const now = audioCtx.currentTime;
+      if (isAudioPlaying) {
+        masterGain.gain.setTargetAtTime(0.08, now, 0.5); // safe, subtle volume
+        tuneSynthesizerToCurrent();
+        document.getElementById('audio-icon-off').classList.add('hidden');
+        document.getElementById('audio-icon-on').classList.remove('hidden');
+        document.getElementById('audio-btn-label').innerText = 'ACOUSTIC DRONE: ACTIVE';
+        document.getElementById('audio-btn-label').classList.add('text-museum-accent');
+      } else {
+        masterGain.gain.setTargetAtTime(0.00001, now, 0.3);
+        document.getElementById('audio-icon-off').classList.remove('hidden');
+        document.getElementById('audio-icon-on').classList.add('hidden');
+        document.getElementById('audio-btn-label').innerText = 'ACOUSTIC DRONE: OFF';
+        document.getElementById('audio-btn-label').classList.remove('text-museum-accent');
+      }
+
+      dismissAudioBanner();
+    }
+
+    function dismissAudioBanner() {
+      document.getElementById('audio-consent-banner').classList.add('hidden');
+    }
+
+    function triggerObjectAcousticBurst() {
+      if (!audioCtx) {
+        initWebAudio();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+
+      // Generate brief harmonic chime ping
+      const pingOsc = audioCtx.createOscillator();
+      const pingGain = audioCtx.createGain();
+      
+      const s = specimens.find(item => item.id === currentSpecimenId);
+      pingOsc.type = 'sine';
+      pingOsc.frequency.setValueAtTime((s?.audioFreq || 220) * 3, audioCtx.currentTime);
+      
+      pingGain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+      pingGain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 1.4);
+
+      pingOsc.connect(pingGain);
+      pingGain.connect(audioCtx.destination);
+
+      pingOsc.start();
+      pingOsc.stop(audioCtx.currentTime + 1.5);
+    }
+
+    /* =========================================================================
+       ACCESSION NEW IMPOSSIBLE SPECIMEN (MODAL & GENERATOR)
+       ========================================================================= */
+    function openNewSpecimenModal() {
+      document.getElementById('new-specimen-modal').classList.remove('hidden');
+      updateWordCount(document.getElementById('form-label'));
+    }
+
+    function closeNewSpecimenModal() {
+      document.getElementById('new-specimen-modal').classList.add('hidden');
+    }
+
+    function updateWordCount(textarea) {
+      const text = textarea.value.trim();
+      const words = text ? text.split(/\s+/).length : 0;
+      const counter = document.getElementById('form-word-count');
+      counter.innerText = `${words} / 100 words`;
+      if (words > 100) {
+        counter.classList.add('text-red-400');
+        counter.classList.remove('text-gray-500');
+      } else {
+        counter.classList.remove('text-red-400');
+        counter.classList.add('text-gray-500');
+      }
+    }
+
+    const PROCEDURAL_SPECIMEN_BANK = [
+      {
+        title: 'Preserved Blind Spot of Thomas Cranmer',
+        accession: '1937.11.04',
+        provenance: 'c. 1556 CE, Oxford | Martyr’s Pyre Excavation',
+        medium: 'Organic negative lumen, annealed glass ampoule',
+        wing: 'Optical Inversions',
+        hazardClass: 'Class-III Cognitohazard',
+        temp: 310.2,
+        label: `Recovered from the ash strata of Broad Street, this dense, non-reflective nodule exhibits zero mass when weighed, yet displaces 340 cubic centimeters of water. X-ray radiometry reveals a fine fibrous lattice consistent with human optic nerve fibers. Though chemically inert, staff handling the vial report catching glimpses of unfamiliar childhood rooms reflected in darkened glass.`,
+        incident: 'Laboratory scales consistently registered negative tare weight for two days after the ampoule was unstoppered.'
+      },
+      {
+        title: 'The Cast of a Midnight Silence',
+        accession: '1924.08.19',
+        provenance: 'c. 2100 BCE, Ur | Royal Cemetery Pit X',
+        medium: 'Vitrified atmospheric stasis, bronze support cradle',
+        wing: 'Acoustic Specimens',
+        hazardClass: 'Class-II Ontological',
+        temp: 268.0,
+        label: `Excavated beneath the death pit of Queen Puabi, this porous basalt block preserves a single cubic meter of dead silence from four millennia ago. Ambient gallery acoustics drop five decibels when passing within its perimeter. Conservators noted microscopic dental indentations along the perimeter that match no catalogued hominid jaw.`,
+        incident: 'An automated microphone placed overnight recorded what sounded like synchronized fingernails tapping from within the sealed stone.'
+      },
+      {
+        title: 'The Unwritten Volume of Alexandria',
+        accession: '1894.02.12',
+        provenance: 'c. 240 BCE, Alexandria | Serapion foundation trench',
+        medium: 'Bleached papyrus matrix, uninked bitumen',
+        wing: 'Temporal Anomalies',
+        hazardClass: 'Class-IV Reality Breach',
+        temp: 295.4,
+        label: `This single intact papyrus codex contains eighty leaves devoid of ink. When examined under direct illumination the sheets remain pristine, yet peripheral vision detects dense cursive Greek detailing historical catastrophes that occurred between 1914 and 1945. Readers are strictly warned not to turn the page past leaf seventy-two.`,
+        incident: 'A cataloguer who read leaf fifty-eight refused to speak English for three weeks, communicating solely through maritime semaphore.'
+      }
+    ];
+
+    function generateRandomImpossibleSpecimen() {
+      const template = PROCEDURAL_SPECIMEN_BANK[Math.floor(Math.random() * PROCEDURAL_SPECIMEN_BANK.length)];
+      document.getElementById('form-title').value = template.title;
+      document.getElementById('form-accession').value = template.accession;
+      document.getElementById('form-provenance').value = template.provenance;
+      document.getElementById('form-medium').value = template.medium;
+      document.getElementById('form-wing').value = template.wing;
+      document.getElementById('form-hazard').value = template.hazardClass;
+      document.getElementById('form-temp').value = template.temp;
+      document.getElementById('form-label').value = template.label;
+      document.getElementById('form-incident').value = template.incident;
+      updateWordCount(document.getElementById('form-label'));
+    }
+
+    function handleNewSpecimenSubmit(e) {
+      e.preventDefault();
+      
+      const title = document.getElementById('form-title').value.trim();
+      const accession = document.getElementById('form-accession').value.trim();
+      const provenance = document.getElementById('form-provenance').value.trim();
+      const medium = document.getElementById('form-medium').value.trim();
+      const wing = document.getElementById('form-wing').value;
+      const hazardClass = document.getElementById('form-hazard').value;
+      const tempKelvin = parseFloat(document.getElementById('form-temp').value) || 293.15;
+      const label = document.getElementById('form-label').value.trim();
+      const incident = document.getElementById('form-incident').value.trim() || 'No incident log filed yet.';
+
+      const words = label.split(/\s+/).length;
+      if (words > 105) {
+        alert('Exhibit labels must be scholarly and concise (100 words or fewer). Please shorten the text.');
+        return;
+      }
+
+      const newSpecimen = {
+        id: 'specimen-' + Date.now(),
+        accession,
+        title,
+        provenance,
+        medium,
+        wing,
+        hazardClass,
+        tempKelvin,
+        mass: 'Unknown',
+        tier: 'ARCHIVAL TIER 2',
+        donor: 'Curatorial Accession Registry.',
+        advice: 'Exercise containment protocol',
+        label,
+        incident,
+        audioFreq: 150 + Math.random() * 150,
+        audioHarmonics: [1.618, 2.5],
+        renderType: 'generic'
+      };
+
+      specimens.unshift(newSpecimen);
+      saveSpecimens();
+      closeNewSpecimenModal();
+      document.getElementById('accession-form').reset();
+      
+      // Select the newly created specimen immediately
+      selectSpecimen(newSpecimen.id);
+    }
+  </script>
+</body>
+</html>
